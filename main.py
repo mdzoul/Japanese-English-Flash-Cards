@@ -3,10 +3,16 @@ import pandas as pd
 import random
 
 BACKGROUND_COLOR = "#B1DDC6"
-
-df = pd.read_csv("./data/nouns_jp.csv")
-df_list = df.to_dict(orient="records")
 current_word = {}
+df_list = {}
+
+try:
+    df = pd.read_csv("./data/words_to_learn.csv")
+except FileNotFoundError:
+    df = pd.read_csv("./data/nouns_jp.csv")
+    df_list = df.to_dict(orient="records")
+else:
+    df_list = df.to_dict(orient="records")
 
 
 def new_card():
@@ -27,6 +33,14 @@ def flip_card():
     canvas.itemconfig(card_title, text="English", fill="white")
     canvas.itemconfig(card_word, text=current_word["english"], fill="white")
     canvas.itemconfig(card_romaji, text="", fill="white")
+
+
+def correct_guess():
+    df_list.remove(current_word)
+    to_learn = pd.DataFrame(df_list)
+    to_learn.to_csv("./data/words_to_learn.csv", index=False)
+
+    new_card()
 
 
 window = Tk()
@@ -58,9 +72,11 @@ wrong_btn.grid(row=2, column=1)
 
 # 'Right' button
 right_img = PhotoImage(file="./images/right.png")
-right_btn = Button(image=right_img, highlightbackground=BACKGROUND_COLOR, command=new_card)
+right_btn = Button(image=right_img, highlightbackground=BACKGROUND_COLOR, command=correct_guess)
 right_btn.grid(row=2, column=2)
 
 new_card()
+
+
 
 window.mainloop()
