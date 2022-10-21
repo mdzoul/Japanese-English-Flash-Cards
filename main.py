@@ -1,9 +1,10 @@
+"""Running this code will display a flashcard for the user to learn and revise on their Japanese"""
 # TODO: Remove timer and allow user to flip the card manually
 # TODO: User to have a choice to choose among the 8 parts of speech (noun, adjective, verb, etc.)
 # TODO: Add the other parts of speech
-from tkinter import *
-import pandas as pd
+from tkinter import Tk, Canvas, Button, PhotoImage
 import random
+import pandas as pd
 
 BACKGROUND_COLOR = "#B1DDC6"
 current_word = {}
@@ -21,6 +22,7 @@ else:
 
 
 def new_card():
+    """Pulls out a new card showing the Japanese word"""
     global current_word, flip_timer
     window.after_cancel(flip_timer)
     current_word = random.choice(df_list)
@@ -34,6 +36,7 @@ def new_card():
 
 
 def flip_card():
+    """Flips card to reveal the english translation"""
     canvas.itemconfig(canvas_img, image=card_back_img)
     canvas.itemconfig(card_title, text="English", fill="white")
     canvas.itemconfig(card_word, text=current_word["english"], fill="white")
@@ -41,6 +44,7 @@ def flip_card():
 
 
 def correct_guess():
+    """Will remove correct words guessed and update words to learn in a new CSV file"""
     df_list.remove(current_word)
     to_learn = pd.DataFrame(df_list)
     to_learn.to_csv("./data/words_to_learn.csv", index=False)
@@ -81,7 +85,5 @@ right_btn = Button(image=right_img, highlightbackground=BACKGROUND_COLOR, comman
 right_btn.grid(row=2, column=2)
 
 new_card()
-
-
 
 window.mainloop()
