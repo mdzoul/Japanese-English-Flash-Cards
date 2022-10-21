@@ -8,8 +8,10 @@ df_list = {}
 
 try:
     df = pd.read_csv("./data/words_to_learn.csv")
+    df["kanji"] = df["kanji"].fillna(df["kana"])
 except FileNotFoundError:
     df = pd.read_csv("./data/nouns_jp.csv")
+    df["kanji"] = df["kanji"].fillna(df["kana"])
     df_list = df.to_dict(orient="records")
 else:
     df_list = df.to_dict(orient="records")
@@ -22,7 +24,7 @@ def new_card():
 
     canvas.itemconfig(canvas_img, image=card_front_img)
     canvas.itemconfig(card_title, text="Japanese", fill="black")
-    canvas.itemconfig(card_word, text=current_word["kana"], fill="black")
+    canvas.itemconfig(card_word, text=current_word["kanji"], fill="black")
     canvas.itemconfig(card_romaji, text=current_word["romaji"], fill="black")
 
     flip_timer = window.after(3000, func=flip_card)
