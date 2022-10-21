@@ -1,3 +1,6 @@
+# TODO: Remove timer and allow user to flip the card manually
+# TODO: User to have a choice to choose among the 8 parts of speech (noun, adjective, verb, etc.)
+# TODO: Add the other parts of speech
 from tkinter import *
 import pandas as pd
 import random
